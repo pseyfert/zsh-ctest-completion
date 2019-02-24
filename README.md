@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/pseyfert/zsh-ctest-completion.svg?branch=master)](https://travis-ci.org/pseyfert/zsh-ctest-completion)
-[![Build Status](https://travis-ci.org/pseyfert/zsh-ctest-completion.svg?branch=master)](https://travis-ci.org/pseyfert/zsh-ctest-completion)
+[![Licence: GPL v3](https://img.shields.io/github/license/pseyfert/zsh-ctest-completion.svg)](LICENSE)
 
 # zsh-ctest-completion
 tab completion for [ctest](https://cmake.org/cmake/help/v3.14/manual/ctest.1.html).
