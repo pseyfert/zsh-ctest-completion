@@ -1,0 +1,133 @@
+#compdef ctest
+
+# Copyright (C) 2019  CERN for the benefit of the LHCb collaboration
+# Author: Paul Seyfert <pseyfert@cern.ch>
+#
+# This software is distributed under the terms of the GNU General Public
+# Licence version 3 (GPL Version 3), copied verbatim in the file "LICENSE".
+#
+# In applying this licence, CERN does not waive the privileges and immunities
+# granted to it by virtue of its status as an Intergovernmental Organization
+# or submit itself to any jurisdiction.
+
+
+_arguments \
+  '(-C --build-config)'{-C,--build-config}"[Choose configuration to test.]:test config:" \
+  '--progress[Enable short progress output from tests.]' \
+  '(-V --verbose -VV --extra-verbose)'{-V,--verbose}'[Enable verbose output from tests.]' \
+  '(-V --verbose -VV --extra-verbose)'{-VV,--extra-verbose}'[Enable more verbose output from tests.]' \
+  '--debug[Displaying more verbose internals of CTest.]' \
+  '--output-on-failure[Output any test output if test fails.]' \
+  '-F[Enable failover.]' \
+  '(-j --parallel)'{-j,--parallel}'[Run the tests in parallel.]:number of jobs' \
+  '(-Q --quiet)'{-Q,--quiet}'[Make ctest quiet.]' \
+  '(-N --show-only)'{-N,--show-only}'[Disable actual execution of tests.]' \
+  '(-O --output-log)'{-O,--output-log}'[Output to log file]:output log file:_path_files' \
+  '--rerun-failed[ only the tests that failed previously]' \
+  '--repeat-until-fail[Require each test to run <n> times without failing in order to pass.]:number of passes' \
+  '(-L --label-regex)'{-L,--label-regex}'[Run tests with labels matching regex.]:label regex to run' \
+  '(-R --tests-regex)'{-R,--tests-regex}'[Run tests matching regex.]:test regex to run' \
+  '(-E --exclude-regex)'{-E,--exclude-regex}'[Exclude tests matching regex.]:test regex to exclude' \
+  '(-LE --label-exclude)'{-LE,--label-exclude}'[Exclude tests with labels matching regex.]:label regex to exclude' \
+  '(-FA --fixture-exclude-any)'{-FA,--fixture-exclude-any}'[Do not automatically add any tests for fixtures matching regular expression.]:regex' \
+  '(-FS --fixture-exclude-setup)'{-FS,--fixture-exclude-setup}'[Do not automatically add setup tests for fixtures matching regular expression.]:regex' \
+  '(-FC --fixture-exclude-cleanup)'{-FC,--fixture-exclude-cleanup}'[Do not automatically add cleanup tests for fixtures matching regular expression.]:regex' \
+
+
+
+
+
+
+
+
+    #
+    #
+    #
+    #
+  # --test-output-size-passed <size>
+  #                              = Limit the output for passed tests to <size>
+  #                                bytes
+  # --test-output-size-failed <size>
+  #                              = Limit the output for failed tests to <size>
+  #                                bytes
+  # -D <dashboard>, --dashboard <dashboard>
+  #                              = Execute dashboard test
+  # -D <var>:<type>=<value>      = Define a variable for script mode
+  # -M <model>, --test-model <model>
+  #                              = Sets the model for a dashboard
+  # -T <action>, --test-action <action>
+  #                              = Sets the dashboard action to perform
+  # --track <track>              = Specify the track to submit dashboard to
+  # -S <script>, --script <script>
+  #                              = Execute a dashboard for a configuration
+  # -SP <script>, --script-new-process <script>
+  #                              = Execute a dashboard for a configuration
+  # -A <file>, --add-notes <file>= Add a notes file with submission
+  # -I [Start,End,Stride,test#,test#|Test file], --tests-information
+  #                              = Run a specific number of tests by number.
+  # -U, --union                  = Take the Union of -I and -R
+  # --max-width <width>          = Set the max width for a test name to output
+  # --interactive-debug-mode [0|1]
+  #                              = Set the interactive mode to 0 or 1.
+  # --no-label-summary           = Disable timing summary information for
+  #                                labels.
+  # --no-subproject-summary      = Disable timing summary information for
+  #                                subprojects.
+  # --build-and-test             = Configure, build and run a test.
+  # --build-target               = Specify a specific target to build.
+  # --build-nocmake              = Run the build without running cmake first.
+  # --build-run-dir              = Specify directory to run programs from.
+  # --build-two-config           = Run CMake twice
+  # --build-exe-dir              = Specify the directory for the executable.
+  # --build-generator            = Specify the generator to use.
+  # --build-generator-platform   = Specify the generator-specific platform.
+  # --build-generator-toolset    = Specify the generator-specific toolset.
+  # --build-project              = Specify the name of the project to build.
+  # --build-makeprogram          = Specify the make program to use.
+  # --build-noclean              = Skip the make clean step.
+  # --build-config-sample        = A sample executable to use to determine the
+  #                                configuration
+  # --build-options              = Add extra options to the build step.
+  # --test-command               = The test to run with the --build-and-test
+  #                                option.
+  # --test-timeout               = The time limit in seconds, internal use
+  #                                only.
+  # --test-load                  = CPU load threshold for starting new parallel
+  #                                tests.
+  # --tomorrow-tag               = Nightly or experimental starts with next day
+  #                                tag.
+  # --overwrite                  = Overwrite CTest configuration option.
+  # --extra-submit <file>[;<file>]
+  #                              = Submit extra files to the dashboard.
+  # --force-new-ctest-process    = Run child CTest instances as new processes
+  # --schedule-random            = Use a random order for scheduling tests
+  # --submit-index               = Submit individual dashboard tests with
+  #                                specific index
+  # --timeout <seconds>          = Set a global timeout on all tests.
+  # --stop-time <time>           = Set a time at which all tests should stop
+  #                                running.
+  # --http1.0                    = Submit using HTTP 1.0.
+  # --no-compress-output         = Do not compress test output when submitting.
+  # --print-labels               = Print all available test labels.
+  # --help,-help,-usage,-h,-H,/? = Print usage information and exit.
+  # --version,-version,/V [<f>]  = Print version number and exit.
+  # --help-full [<f>]            = Print all help manuals and exit.
+  # --help-manual <man> [<f>]    = Print one help manual and exit.
+  # --help-manual-list [<f>]     = List help manuals available and exit.
+  # --help-command <cmd> [<f>]   = Print help for one command and exit.
+  # --help-command-list [<f>]    = List commands with help available and exit.
+  # --help-commands [<f>]        = Print cmake-commands manual and exit.
+  # --help-module <mod> [<f>]    = Print help for one module and exit.
+  # --help-module-list [<f>]     = List modules with help available and exit.
+  # --help-modules [<f>]         = Print cmake-modules manual and exit.
+  # --help-policy <cmp> [<f>]    = Print help for one policy and exit.
+  # --help-policy-list [<f>]     = List policies with help available and exit.
+  # --help-policies [<f>]        = Print cmake-policies manual and exit.
+  # --help-property <prop> [<f>] = Print help for one property and exit.
+  # --help-property-list [<f>]   = List properties with help available and
+  #                                exit.
+  # --help-properties [<f>]      = Print cmake-properties manual and exit.
+  # --help-variable var [<f>]    = Print help for one variable and exit.
+  # --help-variable-list [<f>]   = List variables with help available and exit.
+  # --help-variables [<f>]       = Print cmake-variables manual and exit.
+  #
