@@ -10,28 +10,132 @@
 # granted to it by virtue of its status as an Intergovernmental Organization
 # or submit itself to any jurisdiction.
 
+(( $+functions[_cmake_build_types] )) ||
+_cmake_build_types() {
+  local build_types; build_types=(
+    'Debug'
+    'Release'
+    'RelWithDebInfo'
+    'MinSizeRel'
+  )
+  _values 'build type' ${build_types[@]}
+}
+(( $+functions[_cmake_generators] )) ||
+_cmake_generators() {
+  local generators; generators=(
+    'Unix Makefiles'
+    'Ninja'
+    'CodeBlocks - Ninja'
+    'CodeBlocks - Unix Makefiles'
+    'Eclipse CDT4 - Ninja'
+    'Eclipse CDT4 - Unix Makefiles'
+    'KDevelop3'
+    'KDevelop3 - Unix Makefiles'
+    'Sublime Text 2 - Ninja'
+    'Sublime Text 2 - Unix Makefiles'
+  )
 
-_arguments \
-  '(-C --build-config)'{-C,--build-config}"[Choose configuration to test.]:test config:" \
-  '--progress[Enable short progress output from tests.]' \
-  '(-V --verbose -VV --extra-verbose)'{-V,--verbose}'[Enable verbose output from tests.]' \
-  '(-V --verbose -VV --extra-verbose)'{-VV,--extra-verbose}'[Enable more verbose output from tests.]' \
-  '--debug[Displaying more verbose internals of CTest.]' \
-  '--output-on-failure[Output any test output if test fails.]' \
-  '-F[Enable failover.]' \
-  '(-j --parallel)'{-j,--parallel}'[Run the tests in parallel.]:number of jobs' \
-  '(-Q --quiet)'{-Q,--quiet}'[Make ctest quiet.]' \
-  '(-N --show-only)'{-N,--show-only}'[Disable actual execution of tests.]' \
-  '(-O --output-log)'{-O,--output-log}'[Output to log file]:output log file:_path_files' \
-  '--rerun-failed[ only the tests that failed previously]' \
-  '--repeat-until-fail[Require each test to run <n> times without failing in order to pass.]:number of passes' \
-  '(-L --label-regex)'{-L,--label-regex}'[Run tests with labels matching regex.]:label regex to run' \
-  '(-R --tests-regex)'{-R,--tests-regex}'[Run tests matching regex.]:test regex to run' \
-  '(-E --exclude-regex)'{-E,--exclude-regex}'[Exclude tests matching regex.]:test regex to exclude' \
-  '(-LE --label-exclude)'{-LE,--label-exclude}'[Exclude tests with labels matching regex.]:label regex to exclude' \
-  '(-FA --fixture-exclude-any)'{-FA,--fixture-exclude-any}'[Do not automatically add any tests for fixtures matching regular expression.]:regex' \
-  '(-FS --fixture-exclude-setup)'{-FS,--fixture-exclude-setup}'[Do not automatically add setup tests for fixtures matching regular expression.]:regex' \
-  '(-FC --fixture-exclude-cleanup)'{-FC,--fixture-exclude-cleanup}'[Do not automatically add cleanup tests for fixtures matching regular expression.]:regex' \
+  _describe -t generators 'generator' generators
+}
+
+
+#reduced wrt the original to keep it keep it realistic
+    # '(-Wno-dev -Wdev)-Wno-dev[Suppress/Enable developer warnings]'
+    # '(-Wno-dev -Wdev)-Wdev[Suppress/Enable developer warnings]'
+    # '(-Wno-deprecated -Wdeprecated)-Wno-deprecated[Suppress/Enable deprecation warnings]'
+    # '(-Wno-deprecated -Wdeprecated)-Wdeprecated[Suppress/Enable deprecation warnings]'
+    # '(-Wno-error=dev -Werror=dev)-Wno-error=dev[Make developer warnings (not) errors]'
+    # '(-Wno-error=dev -Werror=dev)-Werror=dev[Make developer warnings (not) errors]'
+    # '(-Wno-error=deprecated -Werror=deprecated)-Werror=deprecated[Make deprecated macro and function warnings (not) errors]'
+    # '(-Wno-error=deprecated -Werror=deprecated)-Wno-error=deprecated[Make deprecated macro and function warnings (not) errors]'
+    # '--warn-uninitialized[Warn about uninitialized values.]'
+    # '--warn-unused-vars[Warn about unused variables.]'
+    # '--no-warn-unused-cli[Dont warn about command line options.]'
+    # '-i[Run in wizard mode]'
+    # '-L-[List cache variables]::_values "options" "[non-advanced cache variables]" "A[advanced cache variables]" "H[non-advanced cached variables with help]" "AH[advanced cache variables with help]"'
+    # '--find-package[Run in pkg-config like mode.]'
+    # ':cmake project:_files -/'
+local cmake_build_options;cmake_build_options=(
+    '-C[Pre-load a script to populate the cache]:script:_files'
+    '*-D-[Create a cmake cache entry]:property:_cmake_define_property'
+    '-U[Remove matching entries from CMake cache]:globbing expression'
+    '-G[Specify a makefile generator]:generator:_cmake_generators'
+    '-T[Specify toolset name if supported by generator]:toolset name'
+    '--trace[Put cmake in trace mode]'
+)
+
+local ctest_build_opts;ctest_build_opts=(
+  '(-C --build-config)'{-C,--build-config}"[Choose configuration to test.]:test config:_cmake_build_types"
+  '--progress[Enable short progress output from tests.]'
+  '(-V --verbose -VV --extra-verbose)'{-V,--verbose}'[Enable verbose output from tests.]'
+  '(-V --verbose -VV --extra-verbose)'{-VV,--extra-verbose}'[Enable more verbose output from tests.]'
+  '--debug[Displaying more verbose internals of CTest.]'
+  '--output-on-failure[Output any test output if test fails.]'
+  '-F[Enable failover.]'
+  '(-j --parallel)'{-j,--parallel}'[Run the tests in parallel.]:number of jobs'
+  '(-Q --quiet)'{-Q,--quiet}'[Make ctest quiet.]'
+  '(-N --show-only)'{-N,--show-only}'[Disable actual execution of tests.]'
+  '(-O --output-log)'{-O,--output-log}'[Output to log file]:output log file:_path_files'
+  '--rerun-failed[ only the tests that failed previously]'
+  '--repeat-until-fail[Require each test to run <n> times without failing in order to pass.]:number of passes'
+  '(-L --label-regex)'{-L,--label-regex}'[Run tests with labels matching regex.]:label regex to run'
+  '(-R --tests-regex)'{-R,--tests-regex}'[Run tests matching regex.]:test regex to run'
+  '(-E --exclude-regex)'{-E,--exclude-regex}'[Exclude tests matching regex.]:test regex to exclude'
+  '(-LE --label-exclude)'{-LE,--label-exclude}'[Exclude tests with labels matching regex.]:label regex to exclude'
+  '(-FA --fixture-exclude-any)'{-FA,--fixture-exclude-any}'[Do not automatically add any tests for fixtures matching regular expression.]:regex'
+  '(-FS --fixture-exclude-setup)'{-FS,--fixture-exclude-setup}'[Do not automatically add setup tests for fixtures matching regular expression.]:regex'
+  '(-FC --fixture-exclude-cleanup)'{-FC,--fixture-exclude-cleanup}'[Do not automatically add cleanup tests for fixtures matching regular expression.]:regex'
+  '--no-label-summary[Disable timing summary information for labels.]'
+  '--no-subproject-summary[Disable timing summary information for subprojects.]'
+)
+
+
+_cmake_build_options() {
+  _arguments "$cmake_build_options[@]"
+}
+
+_fixme() {
+  _message "not implemented"
+}
+
+if [[ $#words -ge 2 && ${words[2]} == --build-and-test ]]; then
+  if (( ${words[(I)--build-options]} )); then
+  _arguments "$cmake_build_options[@]"
+    # TODO: not working!
+    # _alternative \
+    #   '::_cmake_build_options' \
+    #   '::_arguments "(* -)--test-command[The test to run.]:test name"'
+  else
+    _arguments \
+      '--build-and-test[Configure, build and run a test.]:source dir:_path_files -/ :build dir:_path_files -/' \
+      '--build-target[Specify a specific target to build.]:build target:_fixme' \
+      '--build-nocmake[Run the build without running cmake first.]' \
+      '--build-run-dir[Specify directory to run programs from.]:runtime directory: _path_files -/' \
+      '--build-two-config[Run CMake twice]' \
+      '--build-exe-dir[Specify the directory for the executable.]' \
+      '--build-generator[Specify the generator to use.]:build generator:_cmake_generators' \
+      '--build-generator-platform[Specify the generator-specific platform.]:platform' \
+      '--build-generator-toolset[Specify the generator-specific toolset.]:toolset' \
+      '--build-project[Specify the name of the project to build.]:project name' \
+      '--build-makeprogram[Specify the make program to use.]:make program:' \
+      '--build-noclean[Skip the make clean step.]' \
+      '--build-config-sample[A sample executable to use to determine the configuration]:executable' \
+      '--build-options[Add extra options to the build step.]:cmake build options' \
+      '(* -)--test-command[The test to run with the --build-and-test option.]:test name' \
+      '--test-timeout[The time limit in seconds, internal use only.]'
+  fi
+elif [[ $CURRENT -eq 2 ]]; then
+  # TODO: dashboard missing
+  # TODO: separate --build-and-test from the others
+  _arguments \
+    - gotobuild \
+    '--build-and-test[Configure, build and run a test.]:source dir:_path_files -/ :build dir:_path_files -/' \
+    - gototest \
+    "$ctest_build_opts[@]"
+else
+  _arguments \
+    "$ctest_build_opts[@]"
+fi
 
 
 
@@ -39,11 +143,6 @@ _arguments \
 
 
 
-
-    #
-    #
-    #
-    #
   # --test-output-size-passed <size>
   #                              = Limit the output for passed tests to <size>
   #                                bytes
@@ -69,29 +168,6 @@ _arguments \
   # --max-width <width>          = Set the max width for a test name to output
   # --interactive-debug-mode [0|1]
   #                              = Set the interactive mode to 0 or 1.
-  # --no-label-summary           = Disable timing summary information for
-  #                                labels.
-  # --no-subproject-summary      = Disable timing summary information for
-  #                                subprojects.
-  # --build-and-test             = Configure, build and run a test.
-  # --build-target               = Specify a specific target to build.
-  # --build-nocmake              = Run the build without running cmake first.
-  # --build-run-dir              = Specify directory to run programs from.
-  # --build-two-config           = Run CMake twice
-  # --build-exe-dir              = Specify the directory for the executable.
-  # --build-generator            = Specify the generator to use.
-  # --build-generator-platform   = Specify the generator-specific platform.
-  # --build-generator-toolset    = Specify the generator-specific toolset.
-  # --build-project              = Specify the name of the project to build.
-  # --build-makeprogram          = Specify the make program to use.
-  # --build-noclean              = Skip the make clean step.
-  # --build-config-sample        = A sample executable to use to determine the
-  #                                configuration
-  # --build-options              = Add extra options to the build step.
-  # --test-command               = The test to run with the --build-and-test
-  #                                option.
-  # --test-timeout               = The time limit in seconds, internal use
-  #                                only.
   # --test-load                  = CPU load threshold for starting new parallel
   #                                tests.
   # --tomorrow-tag               = Nightly or experimental starts with next day
